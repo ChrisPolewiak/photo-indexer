@@ -1,0 +1,13 @@
+version: '3.8'
+
+services:
+  photo-tag:
+    build: .
+    container_name: photo-processor
+    volumes:
+      - ${IMPORT_PATH}:/data/import
+      - ${LIBRARY_PATH}:/data/library
+      - ${LIBRARYTEST_PATH}:/data/library_test
+    env_file:
+      - .env
+    command: python main.py

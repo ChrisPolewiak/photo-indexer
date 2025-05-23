@@ -1,0 +1,70 @@
+import os
+import json
+import subprocess
+from utils.log_utils import *
+
+
+def apply_exiftool_metadata(file_path, metadata, owner_info=None, session=None):
+
+    author = owner_info["author"]
+    copyright_text = owner_info["copyright"]
+    label = owner_info.get("label")
+
+    args = ['-overwrite_original', '-P']
+
+    log_info("ExifTool metadata apply")
+    
+    filename = os.path.basename(file_path)
+    skip_author = "-not-mine.jpg" in filename
+
+    caption = metadata.get('caption', '').strip()
+    if caption:
+        args.append(f'-XPTitle={caption}')
+        args.append(f'-XPSubject={caption}')
+        comment_hex = ''.join(f'{b:02x}' for b in 'AI Edited'.encode("utf-16le") + b'\x00\x00')
+        args.append(f'-XPComment#={comment_hex}')
+        args.append(f'-XMP-dc:Description={caption}')
+        args.append(f'-XMP-dc:Title={caption}')
+
+    if copyright_text:
+        args.append(f'-XMP-dc:Rights={copyright_text}')
+        args.append('-XMP-xmpRights:Marked=True')
+
+    if author and not skip_author:
+        args.append(f'-XMP-dc:Creator={author}')
+        args.append(f'-Artist={author}')
+        args.append(f'-XPAuthor={author}')
+
+    if label:
+        args.append(f'-XMP:Label={label}')
+
+    keywords = [kw.strip() for kw in metadata.get('keywords', []) if kw.strip()]
+    if keywords:
+        joined = '; '.join(keywords)
+        args.append(f'-XPKeywords={joined}')  # ustawia raz, bez ostrzeżeń
+
+        for kw in keywords:
+            args.append(f'-XMP-dc:Subject+={kw}')
+            args.append(f'-XMP-lr:HierarchicalSubject+=AITags|{kw}')
+
+    args.append(file_path)
+
+    try:
+        if session:
+            session.run_command(args)
+        else:
+            subprocess.run(["exiftool"] + args, check=True)
+
+    except subprocess.CalledProcessError as e:
+        log_error(f"ExifTool failed: {e}")
+
+with open('camera_owners.json', 'r', encoding='utf-8') as f:
+    CAMERA_OWNERS = json.load(f)
+
+def get_metadata_owner(make, model):
+    key = f"{make} {model}"
+    owner = CAMERA_OWNERS.get(key)
+    if not owner:
+        owner = CAMERA_OWNERS.get('Unknown')
+        log_warning(f"Uknown camera: {key}")
+    return owner

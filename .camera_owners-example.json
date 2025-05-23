@@ -1,0 +1,12 @@
+{
+    "Apple iPhone 15 Pro": {
+        "author": "Name Suraname",
+        "copyright": "url or something else",
+        "label": "LabelName"
+    },
+    "Unknown": {
+        "author": "",
+        "copyright": "",
+        "label": ""
+    }
+}
