@@ -171,7 +171,6 @@ def process_images():
                         else:
                             image_data = rescale_image(image, height=AZURE_IMAGE_MAX_DIM)
                         log_debug(f"Rescaled image down to max {AZURE_IMAGE_MAX_DIM}px")
-                        image.save("debug_rescaled.jpg")
 
                     elif width < AZURE_IMAGE_MIN_DIM or height < AZURE_IMAGE_MIN_DIM:
                         log_error(f"Image too small for Azure AI Vision: {width}x{height}px — must be ≥ {AZURE_IMAGE_MIN_DIM}px")
