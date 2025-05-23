@@ -21,6 +21,7 @@ def read_files_from_directory(directory_path):
     files = []
     
     for root, dirs, filenames in os.walk(directory_path):
+        original_dirs = list(dirs)
         # Exclude subdirectories that start with non-alphanumeric characters
         dirs[:] = [d for d in dirs if d and d[0].isalnum()]
 
@@ -28,7 +29,7 @@ def read_files_from_directory(directory_path):
         skipped_dirs = [d for d in original_dirs if d not in dirs]
         for skipped in skipped_dirs:
             log_debug(f"Skipping directory: {os.path.join(root, skipped)}")
-            
+
         for filename in filenames:
             if filename.lower().endswith(('.jpg', '.jpeg', '.heic')):
                 full_path = os.path.join(root, filename)
