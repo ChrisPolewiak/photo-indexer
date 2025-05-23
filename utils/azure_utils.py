@@ -1,3 +1,16 @@
+"""
+azure_vision.py
+
+Purpose:
+    Integration with Azure Vision API for image analysis and tag extraction.
+
+Main Functions:
+    - analyze_image(path): Sends an image to Azure Vision API and returns tags/labels.
+    - get_image_description(path): Retrieves a description of the image from Azure.
+
+Requires Azure credentials configured in the .env file.
+"""
+
 import os
 from azure.ai.vision.imageanalysis import ImageAnalysisClient
 from azure.ai.vision.imageanalysis.models import VisualFeatures

@@ -13,7 +13,7 @@ services:
     env_file:
       - .env
     command: >
-      python index.py --test y
+      python index.py
     logging:
       driver: syslog
       options:

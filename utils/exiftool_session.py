@@ -1,3 +1,16 @@
+"""
+exiftool_session.py
+
+Purpose:
+    Provides a persistent session interface for running ExifTool commands efficiently.
+
+Main Functions:
+    - ExifToolSession: Class for managing a background ExifTool process and sending commands.
+    - run_command(args): Executes ExifTool commands within the session.
+
+Use this module to avoid repeated ExifTool process startup overhead.
+"""
+
 import subprocess
 
 class ExifToolSession:

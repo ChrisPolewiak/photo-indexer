@@ -1,3 +1,16 @@
+"""
+logger.py
+
+Purpose:
+    Logging utilities for the Photo Auto Tag Processor project.
+
+Main Functions:
+    - get_logger(name): Returns a configured logger instance.
+    - log_to_syslog(message): Sends logs to a syslog server if configured.
+
+Supports both console and syslog logging.
+"""
+
 from datetime import datetime
 import os
 

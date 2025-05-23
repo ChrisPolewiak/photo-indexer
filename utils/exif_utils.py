@@ -1,3 +1,17 @@
+"""
+exif_utils.py
+
+Purpose:
+    Utilities for reading, writing, and manipulating EXIF metadata in image files.
+
+Main Functions:
+    - read_exif(path): Reads EXIF metadata from the given image file.
+    - write_exif(path, data): Writes EXIF metadata to the given image file.
+    - update_author(path, author): Updates the author field in EXIF metadata.
+
+This module is used by the main processing script to manage image metadata.
+"""
+
 from datetime import datetime
 import piexif
 import re

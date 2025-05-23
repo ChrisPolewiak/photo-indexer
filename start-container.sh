@@ -32,6 +32,6 @@ docker run --rm \
   -v $LIBRARY_PATH:$TARGET_DIR \
   -v $LIBRARYTEST_PATH:$TARGET_TEST_DIR \
   -u ${LINUX_UID}:${LINUX_GID} \
-  photo-indexer --test y
+  photo-indexer
 
 echo "[INFO] Container finished (auto-removed)."

@@ -1,3 +1,16 @@
+"""
+metadata_utils.py
+
+Purpose:
+    Functions for applying and managing metadata (EXIF, XMP, IPTC) in image files.
+
+Main Functions:
+    - apply_exiftool_metadata(file_path, metadata, owner_info, session): Applies metadata to an image using ExifTool.
+    - get_metadata_owner(make, model): Returns author/copyright info based on camera make/model.
+
+This module centralizes all metadata writing logic for the photo processing pipeline.
+"""
+
 import os
 import json
 import subprocess
@@ -41,7 +54,7 @@ def apply_exiftool_metadata(file_path, metadata, owner_info=None, session=None):
     keywords = [kw.strip() for kw in metadata.get('keywords', []) if kw.strip()]
     if keywords:
         joined = '; '.join(keywords)
-        args.append(f'-XPKeywords={joined}')  # ustawia raz, bez ostrzeżeń
+        args.append(f'-XPKeywords={joined}')
 
         for kw in keywords:
             args.append(f'-XMP-dc:Subject+={kw}')

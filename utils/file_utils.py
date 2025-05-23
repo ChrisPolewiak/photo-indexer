@@ -1,3 +1,17 @@
+"""
+file_utils.py
+
+Purpose:
+    Utility functions for file and directory operations used throughout the project.
+
+Main Functions:
+    - list_images(directory): Returns a list of image files in a directory.
+    - move_file(src, dst): Moves or renames files.
+    - ensure_directory(path): Creates a directory if it does not exist.
+
+Use this module for all file system interactions in the project.
+"""
+
 import os
 from utils.log_utils import log_debug, log_info, log_warning, log_error
 
