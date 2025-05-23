@@ -1,19 +1,24 @@
-FROM python:3.11-slim
+FROM python:3.12-slim
 
-# Instalujemy exiftool i inne wymagane pakiety
-RUN apt-get update && \
-    apt-get install -y exiftool libimage-exiftool-perl git && \
-    apt-get clean
+ENV DEBIAN_FRONTEND=noninteractive
 
-# Ustaw katalog roboczy
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    exiftool \
+    libimage-exiftool-perl \
+    libjpeg-dev \
+    libheif-dev \
+    build-essential \
+    git \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*    
+
 WORKDIR /app
 
-# Skopiuj zależności i zainstaluj
-COPY requirements.txt ./
+COPY requirements.txt .
+
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Skopiuj resztę kodu
 COPY . .
 
-# Uruchomienie domyślne (możesz zmienić na arg z entrypoint)
+ENV PYTHONIOENCODING=utf-8
+
 CMD ["python", "index.py"]

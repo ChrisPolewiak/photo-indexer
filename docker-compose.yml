@@ -3,11 +3,12 @@ version: '3.8'
 services:
   photo-tag:
     build: .
-    container_name: photo-processor
+    container_name: photo-indexer
     volumes:
       - ${IMPORT_PATH}:/data/import
       - ${LIBRARY_PATH}:/data/library
       - ${LIBRARYTEST_PATH}:/data/library_test
     env_file:
       - .env
-    command: python main.py
+    command: >
+      python main.py --test y

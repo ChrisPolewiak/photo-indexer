@@ -26,19 +26,21 @@ load_dotenv()
 parser = argparse.ArgumentParser(description='Process and tag photos.')
 parser.add_argument('--test', '-t', type=str, help='Test mode (y/n)')
 args = parser.parse_args()
+is_test = args.test == 'y'
 
-source_dir = args.source or os.environ.get("IMPORT_PATH")
+source_dir = os.environ.get("SOURCE_DIR")
 action_describe = 'y'
 azureAIVisionMaxImageSize = 20 * 1024 * 1024  # 20 MB
 
-if args.test:
-    target_dir = args.target or os.environ.get("LIBRARYTEST_PATH")
-    print("Test mode enabled.")
+if is_test:
+    target_dir = os.environ.get("TARGET_TEST_DIR")
+    log_info("🧪 Test mode enabled.")
     action_move = False
     debug_status = True
 
 else:
-    target_dir = args.target or os.environ.get("LIBRARYTEST_PATH")
+    target_dir = os.environ.get("TARGET_DIR")
+    log_info("🚀 Production mode.")
     action_move = True
     debug_status = False
 
