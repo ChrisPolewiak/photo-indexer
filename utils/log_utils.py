@@ -10,8 +10,7 @@ GREEN  = "\033[92m"
 GRAY   = "\033[90m"
 
 def log_debug(msg):
-    debug_status = os.environ.get("DEBUG_STATUS")
-    if debug_status:
+    if is_test:
         print(f"{GRAY}[DEBUG] {datetime.now():%Y-%m-%d %H:%M:%S} {msg}{RESET}")
 
 def log_info(msg):

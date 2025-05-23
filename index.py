@@ -62,6 +62,7 @@ def process_images():
         try:
             # Record the start time for processing this file
             file_start = time.time()
+            log_debug(f"Processing file: {file_in}")
             if file_in.lower().endswith(".heic"):
                 heic_path = file_in
                 jpg_path = file_in.rsplit(".", 1)[0] + ".jpg"
@@ -82,6 +83,7 @@ def process_images():
 
             with Image.open(file_in) as image:
 
+                log_debug(f"Reading EXIF data from {file_in}")
                 exif_data = image._getexif() or {}
 
                 camera_make = exif_data.get(271, '').strip()
@@ -100,6 +102,7 @@ def process_images():
                 log_info(f"Camera: '{camera_make} {camera_model}'")
                 cameraOwner = get_metadata_owner(camera_make, camera_model)
 
+                log_debug(f"Camera Owner: {cameraOwner}")
                 dest_dir = os.path.join(target_dir, date_yyyy, f"{date_yyyy}-{date_mm}")
                 log_debug(f"Destination Directory: {dest_dir}")
                 os.makedirs(dest_dir, exist_ok=True)
@@ -109,6 +112,7 @@ def process_images():
 
                 dest_path = os.path.join(dest_dir, dest_filename)
                 if os.path.exists(dest_path):
+                    log_debug(f"File already exists: {dest_path}")
                     i = 1
                     base_name = dest_filename.rsplit('.', 1)[0]
                     while os.path.exists(os.path.join(dest_dir, f"{base_name}_{i}.jpg")):
@@ -122,23 +126,25 @@ def process_images():
 
                 metadata = {}
                 if action_describe:
+                    log_debug(f"Analyzing image: {file_in}")
                     original_size = os.path.getsize(file_in)
                     if original_size == 0:
                         log_error(f"File {file_in} is empty — skipping.")
 
                     if original_size > azureAIVisionMaxImageSize:
+                        log_debug(f"Image size is { round(original_size/1024/1024,2) }MB — resizing to {azureAIVisionMaxImageSize/1024/1024}MB")
                         image_data = resize_image(image, azureAIVisionMaxImageSize)
                         log_debug("Image resized before analysis")
                     else:
+                        log_debug(f"Image size is { round(original_size/1024/1024,2) }MB — using original for analysis")
                         with open(file_in, "rb") as f:
                             image_data = f.read()
 
                         if not image_data:
                             log_error(f"File {file_in} is empty or unreadable")
 
-                        log_debug(f"Image size is { round(original_size/1024/1024,2) }MB — using original for analysis")
-
                     metadata = image_analyse(image_data)
+                    log_debug(f"Metadata size: {len(metadata)}")
 
                 if metadata:
                     apply_exiftool_metadata(
@@ -148,6 +154,7 @@ def process_images():
                         )
 
             if action_move:
+                log_debug(f"Moving file to {dest_path}")
                 if os.path.exists(dest_path):
                     log_debug(f"Removing original file: {file_in}")
                     os.remove(file_in)
