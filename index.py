@@ -12,7 +12,7 @@ from pillow_heif import register_heif_opener
 register_heif_opener()
 
 from utils import (
-    log_debug, log_info, log_warning, log_error, render_progress_bar,
+    log_debug, log_info, log_warning, log_error, render_progress_bar, set_test_mode,
     image_analyse,
     resize_image, 
     get_photo_datetime, write_datetime_to_exif,
@@ -27,6 +27,7 @@ parser = argparse.ArgumentParser(description='Process and tag photos.')
 parser.add_argument('--test', '-t', type=str, help='Test mode (y/n)')
 args = parser.parse_args()
 is_test = args.test == 'y'
+set_test_mode(is_test)
 
 source_dir = os.environ.get("SOURCE_DIR")
 action_describe = 'y'

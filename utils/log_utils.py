@@ -1,6 +1,10 @@
 from datetime import datetime
 import os
 
+is_test = False  # Domyślnie False
+def set_test_mode(test_mode: bool):
+    global is_test
+    is_test = test_mode
 
 # Logging colors
 RESET  = "\033[0m"
@@ -8,6 +12,7 @@ RED    = "\033[91m"
 YELLOW = "\033[93m"
 GREEN  = "\033[92m"
 GRAY   = "\033[90m"
+
 
 def log_debug(msg):
     if is_test:
