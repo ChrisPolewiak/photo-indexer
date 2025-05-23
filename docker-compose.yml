@@ -5,7 +5,7 @@ services:
     build: .
     container_name: photo-indexer
     image: photo-indexer
-    user: "1026:100"
+    user: "${LINUX_UID}:${LINUX_GID}"
     volumes:
       - ${IMPORT_PATH}:/data/import
       - ${LIBRARY_PATH}:/data/library
@@ -17,5 +17,5 @@ services:
     logging:
       driver: syslog
       options:
-        syslog-address: "udp://localhost:514"
+        syslog-address: "udp://${SYSLOG_IP}:514"
         tag: "photo-indexer"
