@@ -3,7 +3,6 @@ version: '3.8'
 services:
   photo-indexer:
     build: .
-    container_name: photo-indexer
     image: photo-indexer
     user: "${LINUX_UID}:${LINUX_GID}"
     volumes:
