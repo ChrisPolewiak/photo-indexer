@@ -6,4 +6,5 @@ exiftool_files
 .venv
 .venv_win
 __pycache__/
-
+local_export
+local_import

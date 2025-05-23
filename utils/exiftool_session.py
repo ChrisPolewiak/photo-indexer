@@ -16,6 +16,7 @@ Use this module to avoid repeated ExifTool process startup overhead.
 
 import subprocess
 
+
 class ExifToolSession:
     def __init__(self, exiftool_path="exiftool"):
         self.process = subprocess.Popen(

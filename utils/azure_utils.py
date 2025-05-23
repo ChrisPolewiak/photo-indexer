@@ -21,8 +21,11 @@ from azure.core.credentials import AzureKeyCredential
 from dotenv import load_dotenv
 from utils.log_utils import *
 
+
 load_dotenv()
 
+AZURE_IMAGE_MAX_DIM = 16000
+AZURE_IMAGE_MIN_DIM = 50
 
 endpoint = os.environ.get("VISION_ENDPOINT")
 key = os.environ.get("VISION_KEY")

@@ -47,23 +47,11 @@ from PIL import Image
 from dotenv import load_dotenv
 from pillow_heif import register_heif_opener
 register_heif_opener()
+from utils import *
 
-from utils import (
-    log_debug, log_info, log_warning, log_error, render_progress_bar, set_test_mode,
-    image_analyse,
-    resize_image, 
-    get_photo_datetime, write_datetime_to_exif,
-    apply_exiftool_metadata, get_metadata_owner,
-    read_files_from_directory,
-    ExifToolSession
-)
+load_dotenv(override=True)
 
-load_dotenv()
-
-parser = argparse.ArgumentParser(description='Process and tag photos.')
-parser.add_argument('--test', '-t', type=str, help='Test mode (y/n)')
-args = parser.parse_args()
-is_test = args.test == 'y'
+is_test = os.environ.get("TEST_MODE", "").lower() == "true"
 set_test_mode(is_test)
 
 source_dir = os.environ.get("SOURCE_DIR")
@@ -169,10 +157,25 @@ def process_images():
                     if original_size == 0:
                         log_error(f"File {file_in} is empty — skipping.")
 
+                    width, height = image.size
+
                     if original_size > azureAIVisionMaxImageSize:
                         log_debug(f"Image size is { round(original_size/1024/1024,2) }MB — resizing to {azureAIVisionMaxImageSize/1024/1024}MB")
                         image_data = resize_image(image, azureAIVisionMaxImageSize)
                         log_debug("Image resized before analysis")
+
+                    # if image dimensions width are too large, resize it
+                    elif width > AZURE_IMAGE_MAX_DIM or height > AZURE_IMAGE_MAX_DIM:
+                        if width > height:
+                            image_data = rescale_image(image, width=AZURE_IMAGE_MAX_DIM)
+                        else:
+                            image_data = rescale_image(image, height=AZURE_IMAGE_MAX_DIM)
+                        log_debug(f"Rescaled image down to max {AZURE_IMAGE_MAX_DIM}px")
+                        image.save("debug_rescaled.jpg")
+
+                    elif width < AZURE_IMAGE_MIN_DIM or height < AZURE_IMAGE_MIN_DIM:
+                        log_error(f"Image too small for Azure AI Vision: {width}x{height}px — must be ≥ {AZURE_IMAGE_MIN_DIM}px")
+
                     else:
                         log_debug(f"Image size is { round(original_size/1024/1024,2) }MB — using original for analysis")
                         with open(file_in, "rb") as f:

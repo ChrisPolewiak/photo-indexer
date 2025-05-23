@@ -16,7 +16,8 @@ Use this module for all file system interactions in the project.
 """
 
 import os
-from utils.log_utils import log_debug, log_info, log_warning, log_error
+from utils.log_utils import *
+
 
 def is_valid_path(path):
     """
