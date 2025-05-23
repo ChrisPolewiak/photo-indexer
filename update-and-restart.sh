@@ -32,4 +32,3 @@ fi
 # Build and start the updated container
 echo "[INFO] Updates detected. Rebuilding and starting container..."
 docker-compose build && docker-compose up
-

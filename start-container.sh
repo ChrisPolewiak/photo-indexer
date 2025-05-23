@@ -1,15 +1,15 @@
 #!/bin/sh
 
-# Nazwa kontenera do monitorowania
+# Container name to monitor
 CONTAINER_NAME="photo-indexer-job"
 
-# Sprawdź, czy kontener już działa
+# Check if the container is already running
 if docker ps --filter "name=$CONTAINER_NAME" --format '{{.Names}}' | grep -q "$CONTAINER_NAME"; then
     echo "[INFO] Container already running. Skipping launch."
     exit 0
 fi
 
-# Uruchom kontener (w tle, z nazwą)
+# Start the container (in background, with name)
 docker run \
   --name $CONTAINER_NAME \
   -e SOURCE_DIR=/data/photos \
@@ -21,7 +21,3 @@ docker run \
   photo-indexer
 
 echo "[INFO] Container started."
-
-# Opcjonalnie: usuwaj kontener po zakończeniu
-# Można dodać np. do innego crona:
-# docker rm -f $CONTAINER_NAME

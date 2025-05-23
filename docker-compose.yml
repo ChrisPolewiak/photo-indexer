@@ -1,10 +1,11 @@
 version: '3.8'
 
 services:
-  photo-tag:
+  photo-indexer:
     build: .
     container_name: photo-indexer
     image: photo-indexer
+    user: "1026:100"
     volumes:
       - ${IMPORT_PATH}:/data/import
       - ${LIBRARY_PATH}:/data/library
