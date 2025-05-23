@@ -10,7 +10,7 @@ if docker ps --filter "name=$CONTAINER_NAME" --format '{{.Names}}' | grep -q "$C
 fi
 
 # Start the container (in background, with name)
-docker run \
+docker run --rm \
   --name $CONTAINER_NAME \
   -e SOURCE_DIR=/data/photos \
   -e TARGET_DIR=/data/output \
