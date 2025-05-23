@@ -58,7 +58,7 @@ def apply_exiftool_metadata(file_path, metadata, owner_info=None, session=None):
     except subprocess.CalledProcessError as e:
         log_error(f"ExifTool failed: {e}")
 
-with open('camera_owners.json', 'r', encoding='utf-8') as f:
+with open('.camera_owners.json', 'r', encoding='utf-8') as f:
     CAMERA_OWNERS = json.load(f)
 
 def get_metadata_owner(make, model):
