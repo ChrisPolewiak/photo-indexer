@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# Load environment variables from .env file
+set -a
+. .env
+set +a
+
 # Container name to monitor
 CONTAINER_NAME="photo-indexer"
 
@@ -19,12 +24,14 @@ fi
 # Start the container (auto-remove after exit)
 docker run --rm \
   --name $CONTAINER_NAME \
-  -e SOURCE_DIR=/data/photos \
-  -e TARGET_DIR=/data/output \
-  -e TZ=Europe/Warsaw \
-  -v /volume1/photos:/data/photos \
-  -v /volume1/output:/data/output \
-  -u 1026:100 \
+  -e SOURCE_DIR=$SOURCE_DIR \
+  -e TARGET_DIR=$TARGET_DIR \
+  -e TARGET_TEST_DIR=$TARGET_TEST_DIR \
+  -e TZ=$TZ \
+  -v $IMPORT_PATH:$SOURCE_DIR \
+  -v $LIBRARY_PATH:$TARGET_DIR \
+  -v $LIBRARYTEST_PATH:$TARGET_TEST_DIR \
+  -u ${LINUX_UID}:${LINUX_GID} \
   photo-indexer
-
+  
 echo "[INFO] Container finished (auto-removed)."
