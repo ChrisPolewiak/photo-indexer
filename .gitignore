@@ -1,6 +1,7 @@
 .env
 .camera_owners.json
-exiftool*
+exiftool.exe
+exiftool_files
 .DS_Store
 .venv
 .venv_win
