@@ -1,3 +1,40 @@
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2025 Chris Polewiak
+
+"""
+This script processes and tags photos by performing the following tasks:
+1. Reads image files from a source directory.
+2. Converts HEIC images to JPG format while preserving EXIF metadata.
+3. Extracts and updates EXIF metadata, including datetime and camera information.
+4. Organizes images into a target directory structure based on their capture date.
+5. Optionally analyzes images to generate additional metadata using external tools.
+6. Moves or copies processed files to the target directory.
+Modules and Libraries:
+- Uses `Pillow` for image processing.
+- Uses `pillow_heif` for HEIC image support.
+- Uses `dotenv` for environment variable management.
+- Uses `ExifTool` for metadata manipulation.
+- Includes custom utility functions for logging, metadata handling, and image analysis.
+Environment Variables:
+- `SOURCE_DIR`: Directory containing the source images.
+- `TARGET_DIR`: Directory for storing processed images in production mode.
+- `TARGET_TEST_DIR`: Directory for storing processed images in test mode.
+Command-line Arguments:
+- `--test` or `-t`: Enables test mode when set to 'y'.
+Key Features:
+- Test mode (`--test y`) processes files without moving them and enables debug logging.
+- Production mode processes files and moves them to the target directory.
+- Automatically handles duplicate filenames by appending an index.
+- Resizes large images for analysis if they exceed the maximum size limit.
+- Logs detailed information about the processing steps and errors.
+Functions:
+- `process_images()`: Main function that orchestrates the image processing workflow.
+Usage:
+Run the script with the appropriate environment variables and optional test mode flag:
+    python index.py --test y
+"""
+
+
 import os
 import sys
 import argparse
