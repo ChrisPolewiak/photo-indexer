@@ -15,7 +15,7 @@ def log_debug(msg):
         print(f"{GRAY}[DEBUG] {datetime.now():%Y-%m-%d %H:%M:%S} {msg}{RESET}")
 
 def log_info(msg):
-    print(f"{GREEN}[INFO] {datetime.now():%Y-%m-%d %H:%M:%S} {msg}{RESET}")
+    print(f"[INFO] {datetime.now():%Y-%m-%d %H:%M:%S} {msg}")
 
 def log_warning(msg):
     print(f"{YELLOW}[WARNING] {datetime.now():%Y-%m-%d %H:%M:%S} {msg}{RESET}")
