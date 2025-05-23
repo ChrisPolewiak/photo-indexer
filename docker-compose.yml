@@ -5,6 +5,7 @@ services:
     build: .
     image: photo-indexer
     user: "${LINUX_UID}:${LINUX_GID}"
+    restart: "no"
     volumes:
       - ${IMPORT_PATH}:/data/import
       - ${LIBRARY_PATH}:/data/library
