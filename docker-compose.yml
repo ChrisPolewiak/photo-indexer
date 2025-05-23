@@ -11,4 +11,9 @@ services:
     env_file:
       - .env
     command: >
-      python index.py --test y   
+      python index.py --test y
+    logging:
+      driver: syslog
+      options:
+        syslog-address: "udp://localhost:514"
+        tag: "photo-indexer"
