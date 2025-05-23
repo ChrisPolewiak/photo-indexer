@@ -4,6 +4,7 @@ services:
   photo-tag:
     build: .
     container_name: photo-indexer
+    image: photo-indexer
     volumes:
       - ${IMPORT_PATH}:/data/import
       - ${LIBRARY_PATH}:/data/library
