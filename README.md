@@ -13,3 +13,5 @@ cd photo-auto
 cp .env.example .env
 nano .env  # uzupełnij dane
 docker compose up --build
+
+

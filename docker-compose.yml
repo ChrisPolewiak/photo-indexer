@@ -11,4 +11,4 @@ services:
     env_file:
       - .env
     command: >
-      python main.py --test y
+      python index.py --test y   
