@@ -2,14 +2,16 @@
 exif_utils.py
 
 Purpose:
-    Utilities for reading, writing, and manipulating EXIF metadata in image files.
+    Utility functions for reading, extracting, and writing EXIF metadata in image files.
 
 Main Functions:
-    - read_exif(path): Reads EXIF metadata from the given image file.
-    - write_exif(path, data): Writes EXIF metadata to the given image file.
-    - update_author(path, author): Updates the author field in EXIF metadata.
+    - get_photo_datetime(exif_data, filename): 
+        Extracts the photo's datetime from EXIF data if available, or tries to parse it from the filename.
+        Returns a datetime object or logs an error if not found.
+    - write_datetime_to_exif(file_path, dt): 
+        Writes the given datetime to the EXIF DateTime, DateTimeOriginal, and DateTimeDigitized fields in the image file.
 
-This module is used by the main processing script to manage image metadata.
+This module is used by the main processing script to ensure correct and consistent date metadata in images.
 """
 
 from datetime import datetime
@@ -19,6 +21,10 @@ from utils.log_utils import *
 
 
 def get_photo_datetime(exif_data, filename):
+    """
+    Extracts the photo datetime from EXIF data or, if unavailable, from the filename.
+    Returns a datetime object or logs an error if not found.
+    """
     dt_str = exif_data.get(36867) or exif_data.get(306)
     if isinstance(dt_str, datetime):
         return dt_str
@@ -38,9 +44,13 @@ def get_photo_datetime(exif_data, filename):
     if match:
         y, m, d, hh, mm, ss = match.groups()
         return datetime.strptime(f"{y}-{m}-{d} {hh}:{mm}:{ss}", "%Y-%m-%d %H:%M:%S")
-    log_error(f"There is not data in EXIF and in {filename}")
+    log_error(f"There is no date in EXIF and in {filename}")
+
 
 def write_datetime_to_exif(file_path, dt: datetime):
+    """
+    Writes the given datetime to the EXIF DateTime, DateTimeOriginal, and DateTimeDigitized fields.
+    """
     exif_dict = piexif.load(file_path)
     dt_string = dt.strftime("%Y:%m:%d %H:%M:%S")
     exif_dict["0th"][piexif.ImageIFD.DateTime] = dt_string

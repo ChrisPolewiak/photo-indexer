@@ -1,3 +1,15 @@
+"""
+image_utils.py
+
+Purpose:
+    Utility functions for image manipulation, such as resizing images to fit a maximum file size.
+
+Main Functions:
+    - resize_image(img, max_size_bytes): Compresses and resizes a PIL Image object to ensure it does not exceed the specified size in bytes.
+
+This module is used to prepare images for processing or uploading by reducing their size while maintaining reasonable quality.
+"""
+
 import io
 from PIL import Image
 from utils.log_utils import *
