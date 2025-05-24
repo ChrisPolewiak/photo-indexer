@@ -61,7 +61,7 @@ azureAIVisionMaxImageSize = 20 * 1024 * 1024  # 20 MB
 if is_test:
     target_dir = os.environ.get("TARGET_TEST_DIR")
     log_info("🧪 Test mode enabled.")
-    action_move = False
+    action_move = True
     debug_status = True
 
 else:
@@ -71,6 +71,12 @@ else:
     debug_status = False
 
 # ----------------- MAIN PROCESS ------------------
+
+SCAN_INTERVAL_SECONDS = 5
+
+
+
+
 
 def process_images():
 
@@ -94,6 +100,9 @@ def process_images():
                 jpg_path = file_in.rsplit(".", 1)[0] + ".jpg"
                 log_info(f"Converting HEIC to JPG: {file_in} -> {jpg_path}")
 
+                if not os.path.exists(file_in):
+                    log_error(f"File not found: {file_in}")
+                    continue
                 with Image.open(heic_path) as image:
                     image = image.convert("RGB")
                     image.save(jpg_path, "JPEG")
@@ -107,6 +116,9 @@ def process_images():
             progress_bar = render_progress_bar(idx, len(all_files))
             log_info(f"Filename: {os.path.basename(file_in)}")
 
+            if not os.path.exists(file_in):
+                log_error(f"File not found: {file_in}")
+                continue
             with Image.open(file_in) as image:
 
                 log_debug(f"Reading EXIF data from {file_in}")
@@ -155,7 +167,9 @@ def process_images():
                 log_debug(f"File copied to {dest_path}")
 
                 metadata = {}
-                if action_describe:
+                if is_ai_described(file_in):
+                    log_info(f"Skipping AI analysis (already tagged as AI Described): {file_in}")
+                else:
                     log_debug(f"Analyzing image: {file_in}")
                     original_size = os.path.getsize(file_in)
                     if original_size == 0:
@@ -189,15 +203,12 @@ def process_images():
                         if not image_data:
                             log_error(f"File {file_in} is empty or unreadable")
 
-                    metadata = image_analyse(image_data)
-                    log_debug(f"Metadata size: {len(metadata)}")
-
-                if metadata:
-                    apply_exiftool_metadata(
-                        dest_path,
-                        metadata,
-                        cameraOwner
-                        )
+                    if metadata:
+                        apply_exiftool_metadata(
+                            dest_path,
+                            metadata,
+                            cameraOwner
+                            )
 
             if action_move:
                 log_debug(f"Moving file to {dest_path}")
@@ -224,4 +235,11 @@ def process_images():
 
 
 if __name__ == '__main__':
-    process_images()
+    log_info("📡 Monitoring started.")
+    while True:
+        if has_pending_files(source_dir):
+            log_info("📸 New files detected — starting processing.")
+            process_images()
+        else:
+            log_debug("No new files found.")
+        time.sleep(SCAN_INTERVAL_SECONDS)

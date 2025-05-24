@@ -10,6 +10,7 @@ Purpose:
 Main Functions:
     - apply_exiftool_metadata(file_path, metadata, owner_info, session): Applies metadata to an image using ExifTool.
     - get_metadata_owner(make, model): Returns author/copyright info based on camera make/model.
+    - is_ai_edited(file_path): Checks if an image has been marked as AI edited in its metadata.
 
 This module centralizes all metadata writing logic for the photo processing pipeline.
 """
@@ -84,3 +85,18 @@ def get_metadata_owner(make, model):
         owner = CAMERA_OWNERS.get('Unknown')
         log_warning(f"Uknown camera: {key}")
     return owner
+
+def is_ai_described(file_path):
+    log_debug(f"Checking if {file_path} is AI described")
+    try:
+        result = subprocess.run(
+            ["exiftool", "-s3", "-XMP-lr:HierarchicalSubject", file_path],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True
+        )
+        line = result.stdout.strip()
+        tags = [tag.strip() for tag in line.split(",")]
+        log_debug(f"AI tags found: {tags}")
+        return any(tag.startswith("AITags") for tag in tags)
+    except Exception as e:
+        log_warning(f"Could not check AI tags for {file_path}: {e}")
+        return False

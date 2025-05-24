@@ -18,8 +18,11 @@ import os
 from azure.ai.vision.imageanalysis import ImageAnalysisClient
 from azure.ai.vision.imageanalysis.models import VisualFeatures
 from azure.core.credentials import AzureKeyCredential
+from azure.core.pipeline.transport import RequestsTransport
 from dotenv import load_dotenv
 from utils.log_utils import *
+
+transport = RequestsTransport(connection_timeout=10, read_timeout=30)
 
 
 load_dotenv()
@@ -29,7 +32,11 @@ AZURE_IMAGE_MIN_DIM = 50
 
 endpoint = os.environ.get("VISION_ENDPOINT")
 key = os.environ.get("VISION_KEY")
-client = ImageAnalysisClient(endpoint=endpoint, credential=AzureKeyCredential(key))
+client = ImageAnalysisClient(
+    endpoint=endpoint,
+    credential=AzureKeyCredential(key),
+    transport=transport
+    )
 
 visual_features = [VisualFeatures.TAGS, VisualFeatures.CAPTION]
 
@@ -37,20 +44,25 @@ def image_analyse(image_data):
 
     log_debug("Analyzing image...")
 
-    result = client.analyze(
-        image_data=image_data,
-        visual_features=visual_features,
-        gender_neutral_caption=True
-        )
+    try:
+        result = client.analyze(
+            image_data=image_data,
+            visual_features=visual_features,
+            gender_neutral_caption=True
+            )
 
-    metadata = {"caption": '', "keywords": []}
-    caption_data = result.get("captionResult")
-    if caption_data and caption_data.get('confidence', 0) > 0.6:
-        metadata['caption'] = caption_data['text']
+        metadata = {"caption": '', "keywords": []}
+        caption_data = result.get("captionResult")
+        if caption_data and caption_data.get('confidence', 0) > 0.6:
+            metadata['caption'] = caption_data['text']
 
-    metadata['keywords'] = []
-    tags_result = result.get("tagsResult", {})
-    tags = tags_result.get("values", [])
-    metadata['keywords'] = [t['name'] for t in tags if t.get("confidence", 0) > 0.6 and t.get("name")]
+        metadata['keywords'] = []
+        tags_result = result.get("tagsResult", {})
+        tags = tags_result.get("values", [])
+        metadata['keywords'] = [t['name'] for t in tags if t.get("confidence", 0) > 0.6 and t.get("name")]
 
-    return metadata
+        return metadata
+
+    except Exception as e:
+        log_error(f"Azure Vision API failed: {type(e).__name__} - {e}")
+        return {}

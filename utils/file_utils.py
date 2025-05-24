@@ -11,7 +11,7 @@ Main Functions:
     - is_valid_path(path): Checks if a path is valid by ensuring all directory parts start with an alphanumeric character.
     - read_files_from_directory(directory_path): Reads all .jpg, .jpeg, and .heic files from a directory, excluding hidden/system directories.
     - move_file_to_unsupported(src): Moves a file to the unsupported directory.
-
+    - has_pending_files(directory): Checks if there are any pending files in a directory, excluding hidden/system directories.
 
 Use this module for all file system interactions in the project.
 """
@@ -42,7 +42,8 @@ def read_files_from_directory(directory_path):
     for root, dirs, filenames in os.walk(directory_path):
         original_dirs = list(dirs)
         # Exclude subdirectories that start with non-alphanumeric characters
-        dirs[:] = [d for d in dirs if d and d[0].isalnum()]
+        EXCLUDED_PREFIXES = ('.', '_', '@')
+        dirs[:] = [d for d in dirs if d and d[0] not in EXCLUDED_PREFIXES]
 
         # Log which directories are being skipped
         skipped_dirs = [d for d in original_dirs if d not in dirs]
@@ -79,3 +80,12 @@ def move_file_to_unsupported(src):
         log_debug(f"File moved successfully: {src} -> {dst}")
     except Exception as e:
         log_error(f"Failed to move file {src} to {dst}: {e}")
+
+def has_pending_files(directory_path):
+    """
+    Returns True if there are files to process in the directory.
+    Uses the same logic as read_files_from_directory.
+    """
+    files = read_files_from_directory(directory_path)
+    return len(files) > 0
+

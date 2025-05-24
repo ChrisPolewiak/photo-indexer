@@ -21,4 +21,4 @@ COPY . .
 
 ENV PYTHONIOENCODING=utf-8
 
-CMD ["python", "index.py"]
+CMD ["python", "main.py"]
