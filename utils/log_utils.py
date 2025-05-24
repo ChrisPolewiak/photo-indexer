@@ -23,21 +23,33 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
-log_path = os.environ.get("LOGS_DIR", "./logs/photo-indexer.log")
-os.makedirs(os.path.dirname(log_path), exist_ok=True)
+log_dir = os.environ.get("LOGS_DIR", "./logs")
+log_file = "photo-indexer.log"
+log_path = os.path.join(log_dir, log_file)
 
-handler = RotatingFileHandler(log_path, maxBytes=5*1024*1024, backupCount=5)
-formatter = logging.Formatter('[%(levelname)s] %(asctime)s %(message)s', "%Y-%m-%d %H:%M:%S")
-handler.setFormatter(formatter)
+try:
+    os.makedirs(log_dir, exist_ok=True)
+except Exception as e:
+    print(f"⚠️ Could not create log directory: {log_dir} — {e}")
 
 logger = logging.getLogger("photo-indexer")
 logger.setLevel(logging.DEBUG)
-logger.addHandler(handler)
+
+# Log to file
+file_handler = RotatingFileHandler(log_path, maxBytes=5*1024*1024, backupCount=5)
+formatter = logging.Formatter('[%(levelname)s] %(asctime)s %(message)s', "%Y-%m-%d %H:%M:%S")
+file_handler.setFormatter(formatter)
+logger.addHandler(file_handler)
+
+# Optional: also log to console
+console_handler = logging.StreamHandler()
+console_handler.setFormatter(formatter)
+logger.addHandler(console_handler)
+
 logger.propagate = False
 
 
-
-is_test = False  # Domyślnie False
+is_test = False
 def set_test_mode(test_mode: bool):
     global is_test
     is_test = test_mode
