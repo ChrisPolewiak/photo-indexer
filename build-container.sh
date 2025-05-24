@@ -20,5 +20,5 @@ if docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
 fi
 
 echo "[INFO] Building and starting container: ${CONTAINER_NAME}"
-docker-compose build --no-cache
+docker-compose build
 docker-compose up -d

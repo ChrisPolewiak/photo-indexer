@@ -23,7 +23,7 @@ import logging
 from logging.handlers import RotatingFileHandler
 import os
 
-log_path = os.environ.get("LOGS_PATH", "./logs/photo-indexer.log")
+log_path = os.environ.get("LOGS_DIR", "./logs/photo-indexer.log")
 os.makedirs(os.path.dirname(log_path), exist_ok=True)
 
 handler = RotatingFileHandler(log_path, maxBytes=5*1024*1024, backupCount=5)
