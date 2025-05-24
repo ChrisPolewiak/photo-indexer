@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Project directory where docker-compose.yml and git repo are located
 PROJECT_DIR="/volume1/docker/photo-indexer"

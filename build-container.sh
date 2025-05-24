@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 # Project directory where docker-compose.yml and git repo are located
 PROJECT_DIR="/volume1/docker/photo-indexer"
@@ -12,12 +12,13 @@ cd "$PROJECT_DIR" || {
   exit 1
 }
 
-# Check if the container is already running
-if docker ps --filter "name=${CONTAINER_NAME}" --format '{{.Names}}' | grep -q "$CONTAINER_NAME"; then
-  echo "[INFO] Container '${CONTAINER_NAME}' is already running. Skipping update."
-  exit 0
+# Check if container exists (running or not)
+if docker ps -a --format '{{.Names}}' | grep -q "^${CONTAINER_NAME}$"; then
+  echo "[INFO] Stopping and removing existing container: ${CONTAINER_NAME}"
+  docker stop "$CONTAINER_NAME" >/dev/null 2>&1
+  docker rm "$CONTAINER_NAME" >/dev/null 2>&1
 fi
 
-# Build and start the updated container
-echo "[INFO] Updates detected. Rebuilding and starting container..."
-docker-compose build && docker-compose up
+echo "[INFO] Building and starting container: ${CONTAINER_NAME}"
+docker-compose build --no-cache
+docker-compose up -d

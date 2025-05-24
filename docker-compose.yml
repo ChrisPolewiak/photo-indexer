@@ -2,6 +2,7 @@ version: '3.8'
 
 services:
   photo-indexer:
+    container_name: photo-indexer
     build: .
     image: photo-indexer
     user: "${LINUX_UID}:${LINUX_GID}"
