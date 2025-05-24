@@ -72,12 +72,6 @@ else:
 
 # ----------------- MAIN PROCESS ------------------
 
-SCAN_INTERVAL_SECONDS = 5
-
-
-
-
-
 def process_images():
 
     # Record the script start time
@@ -236,21 +230,22 @@ def process_images():
     log_info(f"All done. Total: {total:.2f}s | Avg per file: {avg:.2f}s")
 
 
+SCAN_INTERVAL_SECONDS = 5
 
 if __name__ == '__main__':
     log_info("📡 Monitoring started.")
-    max_cycles = 5
-    current_cycle = 0
+    # max_cycles = 5
+    # current_cycle = 0
 
-    while current_cycle < max_cycles:
-#    while True:
+    # while current_cycle < max_cycles:
+    while True:
         if has_pending_files(source_dir):
             log_info("📸 New files detected — starting processing.")
             process_images()
         else:
             log_debug("No new files found.")
 
-        current_cycle += 1
+        # current_cycle += 1
         time.sleep(SCAN_INTERVAL_SECONDS)
 
     log_info("Exiting")
