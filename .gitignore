@@ -8,3 +8,4 @@ exiftool_files
 __pycache__/
 local_export
 local_import
+logs
