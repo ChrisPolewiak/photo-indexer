@@ -31,7 +31,7 @@ Functions:
 - `process_images()`: Main function that orchestrates the image processing workflow.
 Usage:
 Run the script with the appropriate environment variables and optional test mode flag:
-    python index.py --test y
+    python main.py --test y
 """
 
 
@@ -202,6 +202,9 @@ def process_images():
 
                         if not image_data:
                             log_error(f"File {file_in} is empty or unreadable")
+
+                        log_debug("Sending image to Azure Vision API for analysis")
+                        metadata = image_analyse(image_data)
 
                     if metadata:
                         apply_exiftool_metadata(
