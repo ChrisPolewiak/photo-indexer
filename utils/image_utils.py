@@ -10,6 +10,7 @@ Purpose:
 Main Functions:
     - resize_image(img, max_size_bytes): Compresses and resizes a PIL Image object to ensure it does not exceed the specified size in bytes.
     - rescale_image(image, height=None, width=None): Rescales the image to a specified height or width while maintaining the aspect ratio.
+    - pil_image_to_bytes(image, format="JPEG"): Converts a PIL Image object to bytes in the specified format.
 
 This module is used to prepare images for processing or uploading by reducing their size while maintaining reasonable quality.
 """
@@ -68,8 +69,7 @@ def rescale_image(image, height=None, width=None):
     else:
         log_error("Either height or width must be specified for rescaling.")
 
-    image = image.resize(new_size, Image.Resampling.LANCZOS)
-    return pil_image_to_bytes(image)
+    return image.resize(new_size, Image.Resampling.LANCZOS)
 
 
 def pil_image_to_bytes(image, format="JPEG"):

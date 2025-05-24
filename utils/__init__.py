@@ -13,11 +13,13 @@ from utils.exiftool_session import ExifToolSession
 
 from utils.file_utils import (
     read_files_from_directory,
+    move_file_to_unsupported,
 )
 
 from utils.image_utils import (
     rescale_image,
     resize_image,
+    pil_image_to_bytes,
 )
 
 from utils.log_utils import (

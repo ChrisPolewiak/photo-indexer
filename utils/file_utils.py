@@ -8,9 +8,10 @@ Purpose:
     Utility functions for file and directory operations used throughout the project.
 
 Main Functions:
-    - list_images(directory): Returns a list of image files in a directory.
-    - move_file(src, dst): Moves or renames files.
-    - ensure_directory(path): Creates a directory if it does not exist.
+    - is_valid_path(path): Checks if a path is valid by ensuring all directory parts start with an alphanumeric character.
+    - read_files_from_directory(directory_path): Reads all .jpg, .jpeg, and .heic files from a directory, excluding hidden/system directories.
+    - move_file_to_unsupported(src): Moves a file to the unsupported directory.
+
 
 Use this module for all file system interactions in the project.
 """
@@ -57,3 +58,24 @@ def read_files_from_directory(directory_path):
 
     log_debug(f"Total files found: {len(files)}")
     return files
+
+def move_file_to_unsupported(src):
+    """
+    Moves a file to the unsupported directory.
+    """
+    dirname = ".unsupported"
+    dst = os.path.join(os.path.dirname(src), dirname, os.path.basename(src))
+    # create the unsupported directory if it doesn't exist
+    if not os.path.exists(os.path.dirname(dst)):
+        try:
+            os.makedirs(os.path.dirname(dst))
+            log_debug(f"Created unsupported directory: {os.path.dirname(dst)}")
+        except Exception as e:
+            log_error(f"Failed to create unsupported directory: {e}")
+            return
+    log_info(f"Moving unsupported file: {src} -> {dst}")
+    try:
+        os.rename(src, dst)
+        log_debug(f"File moved successfully: {src} -> {dst}")
+    except Exception as e:
+        log_error(f"Failed to move file {src} to {dst}: {e}")
