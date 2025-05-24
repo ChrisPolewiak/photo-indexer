@@ -7,9 +7,10 @@ services:
     user: "${LINUX_UID}:${LINUX_GID}"
     restart: "no"
     volumes:
-      - ${IMPORT_PATH}:/data/import
-      - ${LIBRARY_PATH}:/data/library
-      - ${LIBRARYTEST_PATH}:/data/library_test
+      - ${IMPORT_PATH}:${SOURCE_DIR}
+      - ${LIBRARY_PATH}:${TARGET_DIR}
+      - ${LIBRARYTEST_PATH}:${TARGET_TEST_DIR}
+      - ${LOGS_PATH}:${LOGS_DIR}
     env_file:
       - .env
     command: >

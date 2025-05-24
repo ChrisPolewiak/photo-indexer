@@ -239,10 +239,18 @@ def process_images():
 
 if __name__ == '__main__':
     log_info("📡 Monitoring started.")
-    while True:
+    max_cycles = 5
+    current_cycle = 0
+
+    while current_cycle < max_cycles:
+#    while True:
         if has_pending_files(source_dir):
             log_info("📸 New files detected — starting processing.")
             process_images()
         else:
             log_debug("No new files found.")
+
+        current_cycle += 1
         time.sleep(SCAN_INTERVAL_SECONDS)
+
+    log_info("Exiting")
