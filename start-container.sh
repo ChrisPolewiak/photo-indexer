@@ -22,7 +22,7 @@ fi
 
 
 # Start the container (auto-remove after exit)
-docker run --rm \
+docker run -d \
   --name $CONTAINER_NAME \
   -e SOURCE_DIR=$SOURCE_DIR \
   -e TARGET_DIR=$TARGET_DIR \
