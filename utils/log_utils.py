@@ -63,9 +63,8 @@ GRAY   = "\033[90m"
 
 
 def log_debug(msg):
-    if is_test:
-        print(f"{GRAY}[DEBUG] {datetime.now():%Y-%m-%d %H:%M:%S} {msg}{RESET}", flush=True)
-        logger.debug(msg)
+    print(f"{GRAY}[DEBUG] {datetime.now():%Y-%m-%d %H:%M:%S} {msg}{RESET}", flush=True)
+    logger.debug(msg)
 
 def log_info(msg):
     print(f"[INFO] {datetime.now():%Y-%m-%d %H:%M:%S} {msg}", flush=True)

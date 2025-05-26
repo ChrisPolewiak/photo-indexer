@@ -82,7 +82,7 @@ def process_images():
     all_files.sort()
     file_times = []
 
-    session = ExifToolSession()
+    # session = ExifToolSession()
 
     for idx, file_in in enumerate(all_files, start=1):
         try:
@@ -220,7 +220,7 @@ def process_images():
             tb = traceback.extract_tb(sys.exc_info()[2])[-1]
             log_error(f"Failed: {file_in} | {type(e).__name__} - {e} at {tb.filename}:{tb.lineno}")
 
-    session.close()
+    # session.close()
 
     # Calculate and log total and average processing times
     total = sum(file_times)
