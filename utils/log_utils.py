@@ -33,7 +33,10 @@ except Exception as e:
     print(f"⚠️ Could not create log directory: {log_dir} — {e}")
 
 logger = logging.getLogger("photo-indexer")
-logger.setLevel(logging.DEBUG)
+log_level_str = os.environ.get("LOG_LEVEL", "INFO").upper()
+log_level = getattr(logging, log_level_str, logging.INFO)
+
+logger.setLevel(log_level)
 
 # Log to file
 file_handler = RotatingFileHandler(log_path, maxBytes=5*1024*1024, backupCount=5)

@@ -199,6 +199,7 @@ def process_images():
 
                         log_debug("Sending image to Azure Vision API for analysis")
                         metadata = image_analyse(image_data)
+                        log_debug(f"Received metadata: {metadata}")
 
                     if metadata:
                         apply_exiftool_metadata(
@@ -230,7 +231,7 @@ def process_images():
     log_info(f"All done. Total: {total:.2f}s | Avg per file: {avg:.2f}s")
 
 
-SCAN_INTERVAL_SECONDS = 30
+SCAN_INTERVAL_SECONDS = os.environ.get("SCAN_INTERVAL_SECONDS", 60)
 
 if __name__ == '__main__':
     log_info("📡 Monitoring started.")
