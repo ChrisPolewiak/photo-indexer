@@ -235,6 +235,10 @@ SCAN_INTERVAL_SECONDS = os.environ.get("SCAN_INTERVAL_SECONDS", 60)
 
 if __name__ == '__main__':
     log_info("📡 Monitoring started.")
+    log_info(f"Scan interval: {SCAN_INTERVAL_SECONDS} seconds")
+    log_info(f"Log level: {os.environ.get('LOG_LEVEL', 'INFO').upper()}")
+    log_info(f"Source directory: {source_dir}")
+
     # max_cycles = 5
     # current_cycle = 0
 
