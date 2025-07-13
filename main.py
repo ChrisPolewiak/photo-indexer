@@ -103,7 +103,12 @@ def process_images():
 
                 log_debug(f"Copy EXIF data from HEIC to JPG: {file_in}->{jpg_path}")
                 subprocess.run(["exiftool", "-overwrite_original", "-TagsFromFile", heic_path, jpg_path], check=True)
-                # os.remove(file_in)
+                if not os.path.exists(jpg_path):
+                    log_error(f"Failed to create JPG file: {jpg_path}")
+                    continue
+                else:
+                    log_debug(f"Successfully created JPG file: {jpg_path}")
+                    os.remove(file_in)
                 file_in = jpg_path
 
             file_start = time.time()
