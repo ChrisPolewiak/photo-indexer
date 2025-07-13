@@ -107,7 +107,7 @@ def process_images():
                     log_error(f"Failed to create JPG file: {jpg_path}")
                     continue
                 else:
-                    log_debug(f"Successfully created JPG file: {jpg_path}")
+                    log_info(f"Successfully created JPG file: {jpg_path}")
                     os.remove(file_in)
                 file_in = jpg_path
 
