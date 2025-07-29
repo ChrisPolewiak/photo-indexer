@@ -36,6 +36,8 @@ def apply_exiftool_metadata(file_path, metadata, owner_info=None, session=None):
 
     caption = metadata.get('caption', '').strip()
     if caption:
+        # Add EXIF ImageDescription, IPTC Caption, and XMP Description
+        args.append(f'-ImageDescription={caption}')
         args.append(f'-XPTitle={caption}')
         args.append(f'-XPSubject={caption}')
         comment_hex = ''.join(f'{b:02x}' for b in 'AI Edited'.encode("utf-16le") + b'\x00\x00')

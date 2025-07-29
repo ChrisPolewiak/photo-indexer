@@ -94,6 +94,7 @@ def process_images():
                 jpg_path = file_in.rsplit(".", 1)[0] + ".jpg"
                 log_info(f"Converting HEIC to JPG: {file_in} -> {jpg_path}")
 
+                # Check if the HEIC file exists
                 if not os.path.exists(file_in):
                     log_error(f"File not found: {file_in}")
                     continue
@@ -101,13 +102,16 @@ def process_images():
                     image = image.convert("RGB")
                     image.save(jpg_path, "JPEG")
 
+                # Copy EXIF data from HEIC to JPG
                 log_debug(f"Copy EXIF data from HEIC to JPG: {file_in}->{jpg_path}")
                 subprocess.run(["exiftool", "-overwrite_original", "-TagsFromFile", heic_path, jpg_path], check=True)
+                # Check if the JPG file was created successfully
                 if not os.path.exists(jpg_path):
                     log_error(f"Failed to create JPG file: {jpg_path}")
                     continue
                 else:
                     log_info(f"Successfully created JPG file: {jpg_path}")
+                    # Remove the original HEIC file
                     os.remove(file_in)
                 file_in = jpg_path
 
